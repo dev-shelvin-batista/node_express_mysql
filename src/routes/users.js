@@ -1,12 +1,10 @@
-const Router = require('express');
+const router = require('express').Router();
 const userController = require('../controllers/user');
 
-const userRoutes = Router();
-
 // Generate REST API routes for the users module
-userRoutes.post('', userController.create);
-userRoutes.get('', userController.list);
-userRoutes.put('/:id', userController.update);
-userRoutes.delete('/:id', userController.delete);
+router.post('', userController.create);
+router.get('', userController.list);
+router.put('/:id', userController.update);
+router.delete('/:id', userController.delete);
 
-module.exports = userRoutes;
+module.exports = router;
