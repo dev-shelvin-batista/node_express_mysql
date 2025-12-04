@@ -1,0 +1,6 @@
+.git
+.gitignore
+Dockerfile
+.dockerignore
+node_modules
+Collection_Test.postman_collection.json

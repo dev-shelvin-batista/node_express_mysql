@@ -1,0 +1,49 @@
+version: '3.8'
+
+networks:
+  app-tier:
+    driver: bridge
+
+services:
+  db:
+    image: mysql:5.7
+    command: --default-authentication-plugin=mysql_native_password
+    restart: unless-stopped
+    env_file: ./.env
+    environment:
+      - MYSQL_ROOT_PASSWORD=123456
+      - MYSQL_DATABASE=db_node_express
+    expose:
+      - "3306"
+    ports:
+      - "3306:3306"    
+    networks:
+      - app-tier
+    volumes:
+      - db_data:/var/lib/mysql
+  app:
+    depends_on:
+      - db
+    links:
+      - "db:database"
+    build: .
+    restart: unless-stopped
+    env_file: ./.env
+    expose:
+      - "4000"
+    ports:
+      - "4000:4000"
+    environment:
+      - NODE_ENV=development
+      - DB_HOST=db
+      - DB_USER=root
+      - DB_PASSWORD=123456
+      - DB_NAME=db_node_express
+      - DB_PORT=3306
+      - DB_DIALECT=mysql
+    networks:
+      - app-tier   
+    command: sh -c "sequelize db:migrate && npm run start" # Run migrations and then start the app
+
+volumes: 
+  db_data: {}
